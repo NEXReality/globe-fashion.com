@@ -9,7 +9,7 @@
     <meta name="keywords" content="3D socks configurator, custom socks designer, 3D custom socks, online sock design tool, custom sock generator, personalized socks maker, sock design software, 3D sock customization, interactive sock designer, custom socks visualization">
     <meta name="description" content="Create your own custom socks with our 3D socks configurator. Personalize designs, colors, and stripes with an interactive tool that lets you visualize your unique creations in real-time.">
     <link rel="canonical" href="https://globe-fashion.com/">
-    <meta property="og:image" content="https://nexreality.io/socks-configurator/og_img.jpg">
+    <meta property="og:image" content="https://raw.githubusercontent.com/NEXReality/globe-fashion.com/refs/heads/main/og_img.jpg">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://globe-fashion.com/">
     <meta property="og:title" content="Globe Fashion">
@@ -17,16 +17,18 @@
     <meta name="twitter:title" content="Globe Fashion"> 
     <meta name="twitter:url" content="https://globe-fashion.com/"> 
     <meta name="twitter:description" content="Create your own custom socks with our 3D socks configurator. Personalize designs, colors, and stripes with an interactive tool that lets you visualize your unique creations in real-time."> 
-    <meta name="twitter:image" content="https://nexreality.io/socks-configurator/og_img.jpg">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/NEXReality/globe-fashion.com/refs/heads/main/og_img.jpg">
     <meta name="twitter:card" content="summary">
-    <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-NZM839NP');</script>
-    <!-- End Google Tag Manager -->
-    <link rel="stylesheet" href="styles.css">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J218ER51C4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-J218ER51C4');
+</script>
+    <link rel="stylesheet" href="styles.css?v=2.0">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     </head>
     <body>
@@ -655,9 +657,9 @@
                                     <span data-en>Stripe Position</span>
                                     <span data-fr>Position des Rayures</span>
                                 </span>
-                                <span class="range-value">0</span>
+                                <span class="range-value">5</span>
                             </label>
-                            <input type="range" class="range-input" min="0" max="20" value="0" step="0.1" data-unit="" id="leg-stripes-position-top-tab1">
+                            <input type="range" class="range-input" min="0" max="20" value="5" step="0.1" data-unit="" id="leg-stripes-position-top-tab1">
                         </div>
                         
                         <div class="settings-group" data-stripe-setting="rotation">
@@ -668,7 +670,7 @@
                                 </span>
                                 <span class="range-value">0°</span>
                             </label>
-                            <input type="range" class="range-input" min="-180" max="180" value="0" step="1" data-unit="°" id="leg-stripes-rotation-tab1">
+                            <input type="range" class="range-input" min="-90" max="90" value="0" step="1" data-unit="°" id="leg-stripes-rotation-tab1">
                         </div>
                         
                         <div class="settings-group" data-stripe-setting="gap">
@@ -793,7 +795,7 @@
                                 </span>
                                 <span class="range-value">0°</span>
                             </label>
-                            <input type="range" class="range-input" min="-180" max="180" value="0" step="1" data-unit="°" id="leg-stripes-rotation-tab2">
+                            <input type="range" class="range-input" min="-90" max="90" value="0" step="1" data-unit="°" id="leg-stripes-rotation-tab2">
                         </div>
                         
                         <div class="settings-group" data-stripe-setting="gap">
@@ -919,7 +921,7 @@
                                 </span>
                                 <span class="range-value">0°</span>
                             </label>
-                            <input type="range" class="range-input" min="-180" max="180" value="0" step="1" data-unit="°" id="leg-stripes-rotation-tab3">
+                            <input type="range" class="range-input" min="-90" max="90" value="0" step="1" data-unit="°" id="leg-stripes-rotation-tab3">
                         </div>
                         
                         <div class="settings-group" data-stripe-setting="gap">
@@ -1045,7 +1047,7 @@
                                 </span>
                                 <span class="range-value">0°</span>
                             </label>
-                            <input type="range" class="range-input" min="-180" max="180" value="0" step="1" data-unit="°" id="leg-stripes-rotation-tab4">
+                            <input type="range" class="range-input" min="-90" max="90" value="0" step="1" data-unit="°" id="leg-stripes-rotation-tab4">
                         </div>
                         
                         <div class="settings-group" data-stripe-setting="gap">
@@ -1113,7 +1115,7 @@
                                 </span>
                                 <span class="range-value">0°</span>
                             </label>
-                            <input type="range" class="range-input" min="-180" max="180" value="0" step="1" data-unit="°" id="logo-rotate">
+                            <input type="range" class="range-input" min="-90" max="90" value="0" step="1" data-unit="°" id="logo-rotate">
                         </div>
                     </div>
                 </div>
@@ -1329,7 +1331,7 @@
                                 </span>
                                 <span class="range-value">0°</span>
                             </label>
-                            <input type="range" class="range-input" min="-180" max="180" value="0" step="1" data-unit="°" id="cuff-stripes-rotation-tab1">
+                            <input type="range" class="range-input" min="-90" max="90" value="0" step="1" data-unit="°" id="cuff-stripes-rotation-tab1">
                         </div>
 
                         <div class="settings-group" data-stripe-setting="gap">
@@ -1454,7 +1456,7 @@
                                 </span>
                                 <span class="range-value">0°</span>
                             </label>
-                            <input type="range" class="range-input" min="-180" max="180" value="0" step="1" data-unit="°" id="cuff-stripes-rotation-tab2">
+                            <input type="range" class="range-input" min="-90" max="90" value="0" step="1" data-unit="°" id="cuff-stripes-rotation-tab2">
                         </div>
 
                         <div class="settings-group" data-stripe-setting="gap">
@@ -1579,7 +1581,7 @@
                                 </span>
                                 <span class="range-value">0°</span>
                             </label>
-                            <input type="range" class="range-input" min="-180" max="180" value="0" step="1" data-unit="°" id="cuff-stripes-rotation-tab3">
+                            <input type="range" class="range-input" min="-90" max="90" value="0" step="1" data-unit="°" id="cuff-stripes-rotation-tab3">
                         </div>
 
                         <div class="settings-group" data-stripe-setting="gap">
@@ -1704,7 +1706,7 @@
                                 </span>
                                 <span class="range-value">0°</span>
                             </label>
-                            <input type="range" class="range-input" min="-180" max="180" value="0" step="1" data-unit="°" id="cuff-stripes-rotation-tab4">
+                            <input type="range" class="range-input" min="-90" max="90" value="0" step="1" data-unit="°" id="cuff-stripes-rotation-tab4">
                         </div>
 
                         <div class="settings-group" data-stripe-setting="gap">
@@ -1974,7 +1976,6 @@
     </script>
     <script type="module" src="https://unpkg.com/@lottiefiles/dotlottie-wc@latest/dist/dotlottie-wc.js"></script>
     <!-- Three.js addons -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/controls/OrbitControls.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/loaders/GLTFLoader.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/loaders/DRACOLoader.js"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/environments/RoomEnvironment.js"></script>
@@ -1989,10 +1990,5 @@
 
 <script type="module" src="script.js"></script>
 <!-- <script type="module" src="threeD-script.js"></script> -->
-
- <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NZM839NP"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
 </body>
 </html>

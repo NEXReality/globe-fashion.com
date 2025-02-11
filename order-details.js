@@ -1,1 +1,195 @@
-function getOrderIdFromUrl(){const e=new URLSearchParams(window.location.search);return e.get("orderId")}async function fetchOrderDetails(e){const{data:n,error:t}=await supabase.from("user_orders").select("*").eq("order_id",e).single();return t?(console.error("Error fetching order details:",t),null):n}async function fetchProfileData(e){const{data:n,error:t}=await supabase.from("profiles").select("phone, club_name, address_line1, city, state, zip_code, country").eq("user_id",e).single();return t?(console.error("Error fetching profile data:",t),null):n}async function fetchThumbnailUrl(e){const{data:n,error:t}=await supabase.from("user_files").select("name").or(`design_name.eq.${e},custom_name.eq.${e}`).single();return t?(console.error("Error fetching thumbnail URL:",t),null):n?`${SUPABASE_URL}/storage/v1/object/public/public-bucket/${n.name}`:null}function formatDate(e,n="en"){const t={year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit",hour12:!0};return new Date(e).toLocaleString("fr"===n?"fr-FR":"en-US",t)}function formatAddress(e){const n=[e.address_line1,e.city,e.state,e.country,e.zip_code].filter(Boolean);return n.join("<br>")}async function renderOrderDetails(e,n){const t=localStorage.getItem("language")||"en";document.querySelector(".order-title").textContent=`${getTranslation("orderIdLabel",t)} ${e.order_id}`,document.querySelector(".order-date").textContent=formatDate(e.date,t);const a=document.querySelector(".design-list"),r=Array.isArray(e.order_items)?e.order_items:[e.order_items];let i=0;a.innerHTML="";for(const e of r){const n=document.createElement("div");n.className="design-item";const r=Object.entries(e.sizes).reduce((n,[a,r],i)=>{const l=Math.floor(i/3);return n[l]||(n[l]=[]),n[l].push(`\n          <div class="size-item">\n            ${getTranslation("sizeLabel",t)} ${a}: ${r} ${getTranslation("pairsLabel",t)}\n            <br>\n            <span class="silicon-grip-status">\n              ${getTranslation("siliconGripLabel",t)} ${e.silicon_grip?getTranslation("yes",t):getTranslation("no",t)}\n            </span>\n          </div>\n        `),n},[]),l=r.map(e=>`\n        <div class="size-column">\n          ${e.join("")}\n        </div>\n      `).join(""),s=await fetchThumbnailUrl(e.design_name),o=s||"/placeholder.svg";n.innerHTML=`\n        <div class="design-preview">\n          <img src="${o}" alt="${e.design_name}">\n        </div>\n        <div class="design-details">\n          <h3 class="design-name">${e.design_name}</h3>\n          <div class="size-grid">\n            ${l}\n          </div>\n          <div class="design-total">${getTranslation("totalLabel",t)} ${e.item_total_quantity} ${getTranslation("pairsLabel",t)}</div>\n        </div>\n      `,a.appendChild(n),i+=e.item_total_quantity}document.getElementById("total-quantity").textContent=`${i} ${getTranslation("totalQuantity",t)}`;const l=document.querySelector(".details-grid"),s=n?formatAddress(n):"N/A";l.innerHTML=`\n      <div class="detail-group">\n        <label>${getTranslation("fullNameLabel",t)}</label>\n        <div class="detail-value">${e.full_name}</div>\n      </div>\n      <div class="detail-group">\n        <label>${getTranslation("emailLabel",t)}</label>\n        <div class="detail-value">${e.email_order}</div>\n      </div>\n      <div class="detail-group">\n        <label>${getTranslation("phoneLabel",t)}</label>\n        <div class="detail-value">${n&&n.phone||"N/A"}</div>\n      </div>\n      <div class="detail-group">\n        <label>${getTranslation("clubNameLabel",t)}</label>\n        <div class="detail-value">${n&&n.club_name||"N/A"}</div>\n      </div>\n      <div class="detail-group full-width">\n        <label>${getTranslation("shippingAddressLabel",t)}</label>\n        <div class="detail-value address">\n          ${s}\n        </div>\n      </div>\n    `}async function updateOrderDetails(){const e=localStorage.getItem("language")||"en",n=getOrderIdFromUrl();if(n){const t=await fetchOrderDetails(n);if(t){const e=await fetchProfileData(t.user_id);renderOrderDetails(t,e)}else document.querySelector(".order-details-container").innerHTML=`<p>${getTranslation("errorOrderNotFound",e)}</p>`}else document.querySelector(".order-details-container").innerHTML=`<p>${getTranslation("errorNoOrderId",e)}</p>`}document.addEventListener("DOMContentLoaded",updateOrderDetails);
+function getOrderIdFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('orderId');
+}
+
+async function fetchOrderDetails(orderId) {
+    const { data, error } = await supabase
+        .from('user_orders')
+        .select('*')
+        .eq('order_id', orderId)
+        .single();
+
+    if (error) {
+        console.error('Error fetching order details:', error);
+        return null;
+    }
+
+    return data;
+}
+
+async function fetchProfileData(userId) {
+    const { data, error } = await supabase
+        .from('profiles')
+        .select('phone, club_name, address_line1, city, state, zip_code, country')
+        .eq('user_id', userId)
+        .single();
+
+    if (error) {
+        console.error('Error fetching profile data:', error);
+        return null;
+    }
+
+    return data;
+}
+
+async function fetchThumbnailUrl(designName) {
+    const { data, error } = await supabase
+        .from('user_files')
+        .select('name')
+        .or(`design_name.eq.${designName},custom_name.eq.${designName}`)
+        .single();
+
+    if (error) {
+        console.error('Error fetching thumbnail URL:', error);
+        return null;
+    }
+
+    return data ? `${SUPABASE_URL}/storage/v1/object/public/public-bucket/${data.name}` : null;
+}
+
+function formatDate(dateString, lang = 'en') {
+    const options = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: true
+    };
+    return new Date(dateString).toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-US', options);
+}
+
+function formatAddress(profile) {
+    const addressParts = [
+        profile.address_line1,
+        profile.city,
+        profile.state,
+        profile.country,
+        profile.zip_code
+    ].filter(Boolean);
+
+    return addressParts.join('<br>');
+}
+
+
+
+async function renderOrderDetails(order, profile) {
+    const currentLang = localStorage.getItem("language") || "en"
+  
+    // Update order title and date
+    document.querySelector(".order-title").textContent =
+      `${getTranslation("orderIdLabel", currentLang)} ${order.order_id}`
+    document.querySelector(".order-date").textContent = formatDate(order.date, currentLang)
+  
+    // Render order items
+    const designList = document.querySelector(".design-list")
+    const orderItems = Array.isArray(order.order_items) ? order.order_items : [order.order_items]
+    let totalQuantity = 0
+  
+    designList.innerHTML = "" // Clear existing content
+  
+    for (const item of orderItems) {
+      const designItem = document.createElement("div")
+      designItem.className = "design-item"
+  
+      const sizeColumns = Object.entries(item.sizes).reduce((acc, [size, quantity], index) => {
+        const column = Math.floor(index / 3)
+        if (!acc[column]) acc[column] = []
+        acc[column].push(`
+          <div class="size-item">
+            ${getTranslation("sizeLabel", currentLang)} ${size}: ${quantity} ${getTranslation("pairsLabel", currentLang)}
+            <br>
+            <span class="silicon-grip-status">
+              ${getTranslation("siliconGripLabel", currentLang)} ${item.silicon_grip ? getTranslation("yes", currentLang) : getTranslation("no", currentLang)}
+            </span>
+          </div>
+        `)
+        return acc
+      }, [])
+  
+      const sizeGrid = sizeColumns
+        .map(
+          (column) => `
+        <div class="size-column">
+          ${column.join("")}
+        </div>
+      `,
+        )
+        .join("")
+  
+      const thumbnailUrl = await fetchThumbnailUrl(item.design_name)
+      const imageUrl = thumbnailUrl || "/placeholder.svg"
+  
+      designItem.innerHTML = `
+        <div class="design-preview">
+          <img src="${imageUrl}" alt="${item.design_name}">
+        </div>
+        <div class="design-details">
+          <h3 class="design-name">${item.design_name}</h3>
+          <div class="size-grid">
+            ${sizeGrid}
+          </div>
+          <div class="design-total">${getTranslation("totalLabel", currentLang)} ${item.item_total_quantity} ${getTranslation("pairsLabel", currentLang)}</div>
+        </div>
+      `
+  
+      designList.appendChild(designItem)
+      totalQuantity += item.item_total_quantity
+    }
+  
+    // Update total order quantity
+    document.getElementById("total-quantity").textContent =
+      `${totalQuantity} ${getTranslation("totalQuantity", currentLang)}`
+  
+    // Render customer details
+    const detailsGrid = document.querySelector(".details-grid")
+    const formattedAddress = profile ? formatAddress(profile) : "N/A"
+  
+    detailsGrid.innerHTML = `
+      <div class="detail-group">
+        <label>${getTranslation("fullNameLabel", currentLang)}</label>
+        <div class="detail-value">${order.full_name}</div>
+      </div>
+      <div class="detail-group">
+        <label>${getTranslation("emailLabel", currentLang)}</label>
+        <div class="detail-value">${order.email_order}</div>
+      </div>
+      <div class="detail-group">
+        <label>${getTranslation("phoneLabel", currentLang)}</label>
+        <div class="detail-value">${profile ? profile.phone || "N/A" : "N/A"}</div>
+      </div>
+      <div class="detail-group">
+        <label>${getTranslation("clubNameLabel", currentLang)}</label>
+        <div class="detail-value">${profile ? profile.club_name || "N/A" : "N/A"}</div>
+      </div>
+      <div class="detail-group full-width">
+        <label>${getTranslation("shippingAddressLabel", currentLang)}</label>
+        <div class="detail-value address">
+          ${formattedAddress}
+        </div>
+      </div>
+    `
+  }
+
+  async function updateOrderDetails() {
+    const currentLang = localStorage.getItem("language") || "en"
+    const orderId = getOrderIdFromUrl()
+    if (orderId) {
+      const orderDetails = await fetchOrderDetails(orderId)
+      if (orderDetails) {
+        const profileData = await fetchProfileData(orderDetails.user_id)
+        renderOrderDetails(orderDetails, profileData)
+      } else {
+        document.querySelector(".order-details-container").innerHTML =
+          `<p>${getTranslation("errorOrderNotFound", currentLang)}</p>`
+      }
+    } else {
+      document.querySelector(".order-details-container").innerHTML =
+        `<p>${getTranslation("errorNoOrderId", currentLang)}</p>`
+    }
+  }
+ 
+
+// Call updateOrderDetails when the page loads
+document.addEventListener('DOMContentLoaded', updateOrderDetails);

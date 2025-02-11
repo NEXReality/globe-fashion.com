@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-en="Order Details - 3D Socks Configurator" data-fr="Détails de la Commande - Configurateur de Chaussettes 3D">Order Details - 3D Socks Configurator</title>
+    <title data-en="My Designs - 3D Socks Configurator" data-fr="Mes Designs - Configurateur de Chaussettes 3D">My Designs - 3D Socks Configurator</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <meta name="title" content="3D Socks Configurator">
     <meta name="keywords" content="3D socks configurator, custom socks designer, 3D custom socks, online sock design tool, custom sock generator, personalized socks maker, sock design software, 3D sock customization, interactive sock designer, custom socks visualization">
     <meta name="description" content="Create your own custom socks with our 3D socks configurator. Personalize designs, colors, and stripes with an interactive tool that lets you visualize your unique creations in real-time.">
+    <!-- <link rel="canonical" href="https://globe-fashion.com/"> -->
     <meta property="og:image" content="https://raw.githubusercontent.com/NEXReality/globe-fashion.com/refs/heads/main/og_img.jpg">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://globe-fashion.com/">
@@ -28,14 +29,15 @@
   gtag('config', 'G-J218ER51C4');
 </script>
     <link rel="stylesheet" href="styles.css?v=2">
-    <link rel="stylesheet" href="order-details.css">
+    <link rel="stylesheet" href="my-designs.css">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="brand">
-                <svg
+    <div id="root">
+        <header class="header">
+            <div class="header-content">
+                <div class="brand">
+                    <svg
 	 viewBox="5 59 10 10" enable-background="new 5 59 10 10" style="height: 39px;">
 <path fill="#10319C" d="M8.6,66.2C8.6,66.2,8.6,66.2,8.6,66.2c0-0.3,0.1-0.5,0.2-0.7c0-0.1,0.1-0.2,0-0.3c-0.1-0.4-0.4-0.6-0.7-0.7
 	c0.3-0.6,0.6-1.2,0.7-1.8c0.1-0.4,0.1-0.8,0.2-1.2c0-0.1,0-0.2,0-0.3c0.1,0.1,0.1,0.2,0.1,0.3C9.5,62,10,62.6,10.6,63
@@ -57,65 +59,35 @@
 <span class="brand-name">
     <span data-en>3D Socks Configurator</span>
     <span data-fr>Configurateur de Chaussettes 3D</span>
-</span>            </div>
-            <div class="header-controls">
-                <div class="admin-menu">
-                    <a href="admin.html" class="nav-link active">
-                        <span data-en>Admin</span>
-                        <span data-fr>Administration</span>
-                      </a>
+  </span>
                 </div>
-                <div class="language-toggle">
-                    <span class="language-label">EN</span>
-                    <button class="toggle-switch" aria-label="Switch language">
-                        <span class="toggle-slider"></span>
+                <div class="header-controls">
+                    <a href="admin.html" class="nav-link active">Admin</a>
+                    <div class="language-toggle">
+                        <span class="language-label">EN</span>
+                        <button class="toggle-switch" aria-label="Switch language">
+                            <span class="toggle-slider"></span>
+                        </button>
+                        <span class="language-label">FR</span>
+                    </div>
+                    <button class="user-button">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
+                        </svg>
                     </button>
-                    <span class="language-label">FR</span>
-                </div>
-                <button class="user-button">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <main class="order-details-container">
-        <div class="order-header">
-            <h1 class="order-title"></h1>
-            <div class="order-date"></div>
-        </div>
-
-        <div class="order-content">
-            <div class="order-items">
-                <h2 class="section-title">
-                    <span data-en>Order Items</span>
-                    <span data-fr>Articles Commandés</span>
-                  </h2>
-                <div class="design-list">
-                    <!-- Design items will be dynamically inserted here -->
-                </div>
-                <div class="order-total">
-                    <span>
-                        <span data-en>Total Order Quantity:</span>
-                        <span data-fr>Quantité Totale de la Commande :</span>
-                      </span>
-                    <span id="total-quantity"></span>
                 </div>
             </div>
+        </header>
 
-            <div class="customer-details">
-                <h2 class="section-title">
-                    <span data-en>Customer Details</span>
-                    <span data-fr>Détails du Client</span>
-                  </h2>
-                <div class="details-grid">
-                    <!-- Customer details will be dynamically inserted here -->
-                </div>
+        <main class="my-designs-container">
+            <h1 class="page-title">
+                <span data-en>My Designs</span>
+                <span data-fr>Mes Designs</span>
+              </h1>
+            <div class="designs-grid">
+                <!-- Design cards will be dynamically inserted here -->
             </div>
-        </div>
-    </main>
+        </main>
 
     <!-- Login -->
     <div class="user-dropdown" style="display: none;">
@@ -136,6 +108,7 @@
       <span data-fr>Créer un Compte</span>
         </button>
     </div>
+    
     <div class="modal-overlay" id="login-modal" style="display: none;">
         <div class="modal">
             <div class="modal-content">
@@ -233,7 +206,7 @@
             </div>
         </div>
     </div>
-    <!-- forgot password -->
+    <!-- forggot password -->
     <div class="modal-overlay" id="forgot-password-modal" style="display: none;">
         <div class="modal">
           <div class="modal-content">
@@ -278,9 +251,17 @@
             </form>
           </div>
         </div>
-    </div>
+      </div>
+      <dotlottie-wc 
+      id="loading-animation"
+      src="https://lottie.host/7bd1afc0-edcf-4384-84f0-f79cdaa23370/dwCMHyMcMp.lottie"
+      autoplay
+      loop
+      style="width: 200px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; display: none;">
+  </dotlottie-wc>
+  <script type="module" src="https://unpkg.com/@lottiefiles/dotlottie-wc@latest/dist/dotlottie-wc.js"></script>  
     <script src="auth.js"></script>
-    <script src="order-details.js"></script>
+    <script src="admin-my-designs.js"></script>
 </body>
 </html>
 

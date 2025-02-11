@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-en="Order Details - 3D Socks Configurator" data-fr="Détails de la Commande - Configurateur de Chaussettes 3D">Order Details - 3D Socks Configurator</title>
+    <title data-en="Admin Panel - 3D Socks Configurator" data-fr="Panneau d'Administration - Configurateur de Chaussettes 3D">Admin Panel - 3D Socks Configurator</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <meta name="title" content="3D Socks Configurator">
     <meta name="keywords" content="3D socks configurator, custom socks designer, 3D custom socks, online sock design tool, custom sock generator, personalized socks maker, sock design software, 3D sock customization, interactive sock designer, custom socks visualization">
@@ -28,7 +28,7 @@
   gtag('config', 'G-J218ER51C4');
 </script>
     <link rel="stylesheet" href="styles.css?v=2">
-    <link rel="stylesheet" href="order-details.css">
+    <link rel="stylesheet" href="admin.css?v=2">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -54,17 +54,24 @@
 <path fill="#2B3870" d="M11.4,67.9c0-0.1,0-0.1,0-0.2c0.1-0.3,0.2-0.7,0.4-0.9c0.2,0.1,0.5,0.2,0.5,0.5c0.1,0.2,0,0.4-0.2,0.5
 	C12,67.8,11.7,67.9,11.4,67.9z"/>
 </svg>
-<span class="brand-name">
-    <span data-en>3D Socks Configurator</span>
-    <span data-fr>Configurateur de Chaussettes 3D</span>
-</span>            </div>
+                <span class="brand-name">
+                    <span data-en>3D Socks Configurator</span>
+                    <span data-fr>Configurateur de Chaussettes 3D</span>
+                </span>
+            </div>
             <div class="header-controls">
                 <div class="admin-menu">
-                    <a href="admin.html" class="nav-link active">
-                        <span data-en>Admin</span>
-                        <span data-fr>Administration</span>
-                      </a>
+                    <a href="admin.html" class="nav-link">
+                      <span data-en>User Orders</span>
+                      <span data-fr>Commandes des Utilisateurs</span>
+                    </a>
                 </div>
+                <div class="admin-menu">
+                  <a href="user-designs.html" class="nav-link active">
+                    <span data-en>User Designs</span>
+                    <span data-fr>Conceptions d'utilisateurs</span>
+                  </a>
+              </div>
                 <div class="language-toggle">
                     <span class="language-label">EN</span>
                     <button class="toggle-switch" aria-label="Switch language">
@@ -81,42 +88,102 @@
         </div>
     </header>
 
-    <main class="order-details-container">
-        <div class="order-header">
-            <h1 class="order-title"></h1>
-            <div class="order-date"></div>
+<main class="admin-container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span data-en>User Designs</span>
+            <span data-fr>Conceptions d'utilisateurs</span>
+        </h1>
+        <div class="filter-container">
+            <button id="filterButton" class="filter-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg>
+                <span data-en>Filter: </span>
+                <span data-fr>Filtre: </span>
+                <span id="currentFilter" data-en>None</span>
+                <span id="currentFilter" data-fr>Aucune</span>
+            </button>
+            <div id="filterPopup" class="filter-popup">
+                <button class="filter-option" data-filter="all">
+                    <span data-en>None</span>
+                    <span data-fr>Aucune</span>
+                </button>
+                <button class="filter-option" data-filter="with">
+                    <span data-en>With Designs</span>
+                    <span data-fr>Avec Conceptions</span>
+                </button>
+                <button class="filter-option" data-filter="without">
+                    <span data-en>Without Designs</span>
+                    <span data-fr>Sans Conceptions</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+        <div class="orders-table">
+            <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>
+                      <span data-en>Date</span>
+                      <span data-fr>Date</span>
+                    </th>
+                    <th>
+                      <span data-en>Full Name</span>
+                      <span data-fr>NOM Prénom</span>
+                    </th>
+                    <th>
+                      <span data-en>Email</span>
+                      <span data-fr>E-mail</span>
+                    </th>
+                    <th>
+                      <span data-en>Phone</span>
+                      <span data-fr>Téléphone</span>
+                    </th>
+                    <th>
+                      <span data-en>Club Name</span>
+                      <span data-fr>Nom du club</span>
+                    </th>
+                    <th>
+                      <span data-en>Address</span>
+                      <span data-fr>Adresse</span>
+                    </th>
+                    <th>
+                      <span data-en>Designs</span>
+                      <span data-fr>Dessins</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="orders-table-body">
+                    <!-- Table content will be populated by JavaScript -->
+                </tbody>
+            </table>
         </div>
 
-        <div class="order-content">
-            <div class="order-items">
-                <h2 class="section-title">
-                    <span data-en>Order Items</span>
-                    <span data-fr>Articles Commandés</span>
-                  </h2>
-                <div class="design-list">
-                    <!-- Design items will be dynamically inserted here -->
+        <div class="pagination">
+            <span class="pagination-info">
+                <span data-en>Showing 1 to 20 of 100 results</span>
+                <span data-fr>Affichage de 1 à 20 sur 100 résultats</span>
+              </span>
+            <div class="pagination-controls">
+                <button class="pagination-button" id="prev-page" disabled>
+                    <span data-en>Previous</span>
+                    <span data-fr>Précédent</span>
+                  </button>
+                <div class="page-numbers">
+                    <button class="page-number active">1</button>
+                    <button class="page-number">2</button>
+                    <button class="page-number">3</button>
                 </div>
-                <div class="order-total">
-                    <span>
-                        <span data-en>Total Order Quantity:</span>
-                        <span data-fr>Quantité Totale de la Commande :</span>
-                      </span>
-                    <span id="total-quantity"></span>
-                </div>
-            </div>
-
-            <div class="customer-details">
-                <h2 class="section-title">
-                    <span data-en>Customer Details</span>
-                    <span data-fr>Détails du Client</span>
-                  </h2>
-                <div class="details-grid">
-                    <!-- Customer details will be dynamically inserted here -->
-                </div>
+                <button class="pagination-button" id="next-page">
+                    <span data-en>Next</span>
+                    <span data-fr>Suivant</span>
+                </button>
             </div>
         </div>
     </main>
-
     <!-- Login -->
     <div class="user-dropdown" style="display: none;">
         <button class="dropdown-item" id="login-btn">
@@ -279,8 +346,16 @@
           </div>
         </div>
     </div>
+    <dotlottie-wc 
+    id="loading-animation"
+    src="https://lottie.host/7bd1afc0-edcf-4384-84f0-f79cdaa23370/dwCMHyMcMp.lottie"
+    autoplay
+    loop
+    style="width: 200px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; display: none;">
+</dotlottie-wc>
+<script type="module" src="https://unpkg.com/@lottiefiles/dotlottie-wc@latest/dist/dotlottie-wc.js"></script>  
     <script src="auth.js"></script>
-    <script src="order-details.js"></script>
+    <script src="admin-user-designs.js"></script>
 </body>
 </html>
 
