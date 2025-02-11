@@ -316,6 +316,6 @@ async function deleteDesign(event) {
 document.addEventListener('DOMContentLoaded', renderDesigns);
 
 function openDesign(shortCode) {
-    const designUrl = `${window.location.origin}/Socks-Configurator/index.html?=${shortCode}`;
+    const designUrl = `${window.location.origin}/index.html?=${shortCode}`;
     window.open(designUrl, '_self');
 }
