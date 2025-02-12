@@ -733,7 +733,7 @@ async function updateExistingDesign(designId, designName) {
             .from('public-bucket')
             .getPublicUrl(userFolderPath);
 
-        const publicUrl = urlData.publicUrl;
+            const publicUrl = `${urlData.publicUrl}?v=${Date.now()}`;
 
         // Get the current design data
         let configJSON = {};
