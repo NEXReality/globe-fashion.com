@@ -2,6 +2,10 @@ const SUPABASE_URL = 'https://jvuibcqogyyffylvfeog.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2dWliY3FvZ3l5ZmZ5bHZmZW9nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYzMjg3MzUsImV4cCI6MjA1MTkwNDczNX0.iIu6f3LwdLmHoHmuVjbuVm-uLCDWA3oGZ7J07wXGBBU';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// Function to get the current language
+function getCurrentLanguage() {
+  return localStorage.getItem("language") || "en"
+}
 // Check if user logged in
 async function checkUserLoggedIn() {
     const { data: { user } } = await supabase.auth.getUser();
@@ -480,7 +484,7 @@ document.addEventListener('click', async (e) => {
           });
       });
   }
-  
+
   function updatePlaceholders(lang) {
       const inputs = document.querySelectorAll('input[placeholder]');
       inputs.forEach(input => {
@@ -629,10 +633,7 @@ const alertMessages = {
     }
   }
 
-// Function to get the current language
-function getCurrentLanguage() {
-  return localStorage.getItem("language") || "en"
-}
+
 
 // Function to show translated alert
 function showTranslatedAlert(messageKey, ...args) {
@@ -668,7 +669,6 @@ window.translatedAlert = showTranslatedAlert
           document.title = titleElement.getAttribute(`data-${lang}`);
       }
       // Update design cards if they exist in the my-desings
-    // Update design cards if they exist on the page
     if (document.querySelector(".design-card")) {
       updateDesignCards(lang)
     }
@@ -677,11 +677,12 @@ window.translatedAlert = showTranslatedAlert
   // Initialize language on page load
   document.addEventListener('DOMContentLoaded', () => {
       // Clear any existing language setting to ensure fresh start
-      if (!localStorage.getItem('language')) {
+      if (localStorage.getItem('language') === null) {
           localStorage.setItem('language', 'en');
       }
       const initialLang = localStorage.getItem('language');
       setLanguage(initialLang);
+      updateSelectOptions(initialLang);  // Ensure select options are updated on load
       updateUIBasedOnLoginStatus();
   });
   

@@ -15,7 +15,7 @@ let isSharedDesign = false;
 // Get all radio groups
 const legStripesGroup = document.getElementById('leg-stripes-orientation').closest('.radio-group');
 const cuffStripesGroup = document.getElementById('cuff-stripes-orientation').closest('.radio-group');
-
+const initialLang = localStorage.getItem('language');
 partButtons.forEach(button => {
     button.addEventListener('click', () => {
         // Update active button
@@ -33,6 +33,7 @@ partButtons.forEach(button => {
         // Initialize each group
         handleRadioChange(legStripesGroup, 'leg');
         handleRadioChange(cuffStripesGroup, 'cuff');
+        updateSelectOptions(initialLang);
     });
 });
 
@@ -733,7 +734,7 @@ async function updateExistingDesign(designId, designName) {
             .from('public-bucket')
             .getPublicUrl(userFolderPath);
 
-            const publicUrl = `${urlData.publicUrl}?v=${Date.now()}`;
+        const publicUrl = urlData.publicUrl;
 
         // Get the current design data
         let configJSON = {};
@@ -1069,8 +1070,8 @@ const stripeOptions = {
         { value: "4", textEn: "4 Stripes", textFr: "4 Rayures" }
     ],
     vertical: [
-        { value: "0", textEn: "Without Stripes", textFr: "Sans Rayure" },
-        { value: "1", textEn: "With Stripe", textFr: "Avec Rayure" }
+        { value: "0", textEn: "Without Stripes", textFr: "Sans Rayures" },
+        { value: "1", textEn: "With Stripe", textFr: "Avec Rayures" }
     ]
 };
 // Mapping for horizontal to vertical conversion
@@ -1109,14 +1110,16 @@ function handleRadioChange(radioGroup, part) {
         
         // Clear existing options
         select.innerHTML = '';
-        
+
+        let currentLanguage = localStorage.getItem('language') || "en"; // Get language from localStorage, default to English
+
         // Add new options
         options.forEach(option => {
             const optionElement = document.createElement('option');
             optionElement.value = option.value;
             optionElement.setAttribute('data-en', option.textEn);
             optionElement.setAttribute('data-fr', option.textFr);
-            optionElement.textContent = option.textEn; // Default to English
+             optionElement.textContent = currentLanguage === "fr" ? option.textFr : option.textEn;
             select.appendChild(optionElement);
         });
         
