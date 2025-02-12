@@ -63,9 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="design-info">
                     <h3>${displayName}</h3>
-                    <p>Created on ${createdDate}</p>
+                    <p>
+                    <span data-en="Created on" data-fr="Créé le">${getTranslation("created_on", getCurrentLanguage())}</span> ${createdDate}
+                </p>
                 </div>
-                <button class="select-button">Select</button>
+                <button class="select-button">
+                <span data-en="Select" data-fr="Sélectionner">${getTranslation("select", getCurrentLanguage())}</span>
+            </button>
             `
     
         designItem.addEventListener("click", () => selectDesign(design))

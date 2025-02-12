@@ -590,13 +590,16 @@ async function uploadThumbnailAndSaveDesign(designName) {
         if (!user) {
             console.error('No user logged in');
             hideLoading();
-            return { success: false, message: 'No user logged in' };
+            return { 
+                success: false, 
+                message: getTranslation('no_user_logged_in', getCurrentLanguage()) 
+              };
         }
 
         const designExists = await checkDesignNameExists(designName);
         if (designExists) {
             hideLoading();
-            return { success: false, message: 'A design with this name already exists. Please choose another name.' };
+            return { success: false, message: getTranslation('design_name_exists', getCurrentLanguage()) };
         }
 
         const userId = user.id;
@@ -618,7 +621,10 @@ async function uploadThumbnailAndSaveDesign(designName) {
             console.error('Upload error:', uploadError);
             if (uploadError.statusCode === 409) {
                 hideLoading();
-                return { success: false, message: 'A file with this name already exists. Please try again.' };
+                return { 
+                    success: false, 
+                    message: getTranslation('file_name_exists', getCurrentLanguage()) 
+                  };
             } else {
                 console.warn('Non-blocking error during upload:', uploadError);
             }
@@ -673,7 +679,7 @@ async function uploadThumbnailAndSaveDesign(designName) {
             .from('public-bucket')
             .getPublicUrl(userFolderPath);
 
-        const publicUrl = urlData.publicUrl;
+            const publicUrl = `${urlData.publicUrl}?v=${Date.now()}`;
         updateUIAfterSave(publicUrl);
 
         isInitialSave = false;
@@ -683,7 +689,10 @@ async function uploadThumbnailAndSaveDesign(designName) {
     } catch (error) {
         console.error('Error saving design:', error);
         hideLoading();
-        return { success: false, message: 'Error saving design. Please try again.' };
+        return { 
+            success: false, 
+            message: getTranslation('error_saving_design', getCurrentLanguage()) 
+          };;
     }
 }
 
@@ -693,7 +702,10 @@ async function updateExistingDesign(designId, designName) {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
             console.error('No user logged in');
-            return { success: false, message: 'No user logged in' };
+            return { 
+                success: false, 
+                message: getTranslation('no_user_logged_in', getCurrentLanguage()) 
+              };
         }
 
         // Take a new screenshot
@@ -753,7 +765,10 @@ async function updateExistingDesign(designId, designName) {
         return { success: true, message: 'Design updated successfully' };
     } catch (error) {
         console.error('Error updating design:', error);
-        return { success: false, message: 'Error updating design. Please try again.' };
+        return { 
+            success: false, 
+            message: getTranslation('error_updating_design', getCurrentLanguage()) 
+          };
     }
 }
 // Function to update UI after saving
@@ -890,7 +905,11 @@ async function uploadLogoToSupabase(file) {
         if (!user) {
             console.error('No user logged in');
             hideLoading();
-            return { success: false, message: 'No user logged in' };
+            showLoginModal()
+            return { 
+                success: false, 
+                message: getTranslation('no_user_logged_in', getCurrentLanguage()) 
+              };
         }
 
         const userId = user.id;
@@ -911,7 +930,10 @@ async function uploadLogoToSupabase(file) {
         if (uploadError) {
             console.error('Upload error:', uploadError);
             hideLoading();
-            return { success: false, message: 'Error uploading logo. Please try again.' };
+            return { 
+                success: false, 
+                message: getTranslation('error_uploading_logo', getCurrentLanguage()) 
+              };
         }
 
         // Get the public URL
@@ -932,7 +954,10 @@ async function uploadLogoToSupabase(file) {
         setTimeout(() => {
             hideLoading();
         }, 2500);
-        return { success: false, message: 'Error uploading logo. Please try again.' };
+        return { 
+            success: false, 
+            message: getTranslation('error_uploading_logo', getCurrentLanguage()) 
+          };
     }
 }
 
@@ -1037,15 +1062,15 @@ document.addEventListener('DOMContentLoaded', detectSharedDesign);
 // Define the options for each orientation
 const stripeOptions = {
     horizontal: [
-        { value: "0", textEn: "0 Stripe", textFr: "0 Rayure" },
+        { value: "0", textEn: "Without Stripes", textFr: "Sans Rayure" },
         { value: "1", textEn: "1 Stripe", textFr: "1 Rayure" },
         { value: "2", textEn: "2 Stripes", textFr: "2 Rayures" },
         { value: "3", textEn: "3 Stripes", textFr: "3 Rayures" },
         { value: "4", textEn: "4 Stripes", textFr: "4 Rayures" }
     ],
     vertical: [
-        { value: "0", textEn: "0 Stripe", textFr: "0 Rayure" },
-        { value: "1", textEn: "1 Stripe", textFr: "1 Rayure" }
+        { value: "0", textEn: "Without Stripes", textFr: "Sans Rayure" },
+        { value: "1", textEn: "With Stripe", textFr: "Avec Rayure" }
     ]
 };
 // Mapping for horizontal to vertical conversion
@@ -1071,13 +1096,16 @@ function handleRadioChange(radioGroup, part) {
         background.style.transform = 'translateX(100%)';
         orientation = "vertical";
     }
-
+    
     for (let tabNumber = 1; tabNumber <= 4; tabNumber++) {
         const select = document.getElementById(`${part}-stripes-select-tab${tabNumber}`);
         if (!select) continue; // Skip if select doesn't exist
         
         const currentValue = select.value;
         const options = stripeOptions[orientation];
+
+        const rotationElement = document.getElementById(`${part}-stripes-rotation-tab${tabNumber}`);
+        const rotationDiv = rotationElement.closest(".settings-group");
         
         // Clear existing options
         select.innerHTML = '';
@@ -1093,17 +1121,21 @@ function handleRadioChange(radioGroup, part) {
         });
         
         // Handle value mapping when switching from horizontal to vertical
-            if (orientation === 'vertical') {
-                select.value = horizontalToVerticalMap[currentValue];
-            } else {
-                // For other cases, try to maintain the current value if it exists
-                const validValues = options.map(opt => opt.value);
-                if (validValues.includes(currentValue)) {
-                    select.value = currentValue;
-                } else {
-                    select.value = options[0].value; // Default to first option
+        if (orientation === 'vertical') {
+            select.value = horizontalToVerticalMap[currentValue];
+            rotationDiv.style.display = "none";
+        } else {
+            // For other cases, try to maintain the current value if it exists
+            const validValues = options.map(opt => opt.value);
+            if (validValues.includes(currentValue)) {
+                select.value = currentValue;
+                if (currentValue !== "0") {
+                    rotationDiv.style.display = "block";
                 }
+            } else {
+                select.value = options[0].value; // Default to first option
             }
+        }
         
     }
     

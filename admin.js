@@ -85,7 +85,7 @@ async function updateTable() {
 }
 
 function updatePaginationInfo(start, end, total) {
-    const paginationInfo = document.getElementById('pagination-info');
+    const paginationInfo = document.querySelector('.pagination-info');
     if (!paginationInfo) return;
 
     const currentLang = getCurrentLanguage();

@@ -10,13 +10,49 @@ async function checkUserLoggedIn() {
 
 // Handle create account form submission
 const createAccountForm = document.querySelector('.create-account-form');
+const phoneNumberInput = document.getElementById('phoneNumber');
+
+// Function to validate phone number
+function validatePhoneNumber(phoneNumber) {
+    return /^[\d()+\-]{7,15}$/.test(phoneNumber);
+}
+
+// Add event listener to phone number input
+phoneNumberInput.addEventListener('input', function(e) {
+    let input = e.target.value;
+    
+    // Remove any characters that are not digits, +, -, (, or )
+    input = input.replace(/[^\d()+\-]/g, '');
+    
+    // Truncate to 15 characters if longer
+    input = input.slice(0, 15);
+    
+    // Update the input value
+    e.target.value = input;
+    
+    // Visual feedback for minimum length
+    if (input.length < 7) {
+        e.target.setCustomValidity('Phone number must be at least 7 characters long');
+    } else {
+        e.target.setCustomValidity('');
+    }
+});
+
 createAccountForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const firstName = document.getElementById('firstName').value;
     const lastName = document.getElementById('lastName').value;
+    const phoneNumber = phoneNumberInput.value;
+    const clubName = document.getElementById('clubName').value;
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
     
+    // Ensure phone number is valid
+    if (!validatePhoneNumber(phoneNumber)) {
+        window.translatedAlert('invalid_phone_number', 'Phone number must be 7-15 characters long and contain only numbers, +, -, (, and )');
+        return;
+    }
+
     try {
         const { data, error } = await supabase.auth.signUp({ 
             email, 
@@ -24,7 +60,9 @@ createAccountForm.addEventListener('submit', async (e) => {
             options: {
                 data: {
                     first_name: firstName,
-                    last_name: lastName
+                    last_name: lastName,
+                    phone_number: phoneNumber,
+                    club_name: clubName
                 }
             }
         });
@@ -166,7 +204,7 @@ forgotPasswordForm.addEventListener('submit', async (e) => {
     
     try {
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: 'https://globe-fashion.nexreality.io/reset-password.html'
+            redirectTo: 'https://globe-fashion.com/reset-password.html'
         });
         
         if (error) throw error;
@@ -275,6 +313,42 @@ function getTranslation(key, lang) {
       en: "Error: No order ID provided",
       fr: "Erreur: Aucun ID de commande fourni",
     },
+    created_on: {
+      en: "Created on",
+      fr: "Créé le",
+    },
+    select: {
+      en: "Select",
+      fr: "Sélectionner",
+    },
+    delete_confirmation: {
+      en: 'Are you sure you want to delete "{0}"?',
+      fr: 'Êtes-vous sûr de vouloir supprimer "{0}" ?'
+    },
+    design_name_exists: {
+      en: 'A design with this name already exists. Please choose another name.',
+      fr: 'Un design avec ce nom existe déjà. Veuillez choisir un autre nom.'
+    },
+    file_name_exists: {
+      en: 'A file with this name already exists. Please try again.',
+      fr: 'Un fichier avec ce nom existe déjà. Veuillez réessayer.'
+    },
+    error_saving_design: {
+      en: 'Error saving design. Please try again.',
+      fr: 'Erreur lors de l\'enregistrement du design. Veuillez réessayer.'
+    },
+    error_updating_design: {
+      en: 'Error updating design. Please try again.',
+      fr: 'Erreur lors de la mise à jour du design. Veuillez réessayer.'
+    },
+    error_uploading_logo: {
+      en: 'Error uploading logo. Please try again.',
+      fr: 'Erreur lors du téléchargement du logo. Veuillez réessayer.'
+    },
+    no_user_logged_in: {
+      en: 'No user logged in',
+      fr: 'Aucun utilisateur connecté'
+    }
   }
   return translations[key]?.[lang] || key
 }
@@ -548,6 +622,10 @@ const alertMessages = {
     'unique_name_error': {
         'en': 'A design with this name already exists. Please use a unique name.',
         'fr': 'Un design portant ce nom existe déjà. Veuillez utiliser un nom unique.'
+    },
+    'unique_name_error': {
+        'en': 'A design with this name already exists. Please use a unique name.',
+        'fr': 'Un design portant ce nom existe déjà. Veuillez utiliser un nom unique.'
     }
   }
 
@@ -589,6 +667,11 @@ window.translatedAlert = showTranslatedAlert
       if (titleElement && titleElement.getAttribute(`data-${lang}`)) {
           document.title = titleElement.getAttribute(`data-${lang}`);
       }
+      // Update design cards if they exist in the my-desings
+    // Update design cards if they exist on the page
+    if (document.querySelector(".design-card")) {
+      updateDesignCards(lang)
+    }
   }
   
   // Initialize language on page load

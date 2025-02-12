@@ -1,4 +1,3 @@
-
 async function fetchDesigns() {
     const { data: { user } } = await supabase.auth.getUser()
     const { data, error } = await supabase
@@ -36,19 +35,22 @@ function createDesignCard(design) {
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    Rename
+                    <span data-en>Rename</span>
+                    <span data-fr>Renommer</span>
                 </button>
                 <button class="menu-item share-button">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 9.316a3 3 0 105.368-2.684 3 3 0 00-5.368 2.684zm0-9.316a3 3 0 105.366-2.683 3 3 0 00-5.366 2.683z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    Share
+                    <span data-en>Share</span>
+                    <span data-fr>Partager</span>
                 </button>
                 <button class="menu-item delete-button">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    Delete
+                    <span data-en>Delete</span>
+                    <span data-fr>Supprimer</span>
                 </button>
             </div>
         </div>
@@ -56,16 +58,30 @@ function createDesignCard(design) {
             <img src="${imageUrl}" alt="${displayName} Preview" />
         </div>
         <div class="design-footer">
-            <span class="creation-date" id="creation-date">Created on: ${new Date(design.created_at).toLocaleDateString()}</span>
+            <span class="creation-date" id="creation-date">
+  ${getTranslation("created_on", getCurrentLanguage())}: ${new Date(design.created_at).toLocaleDateString()}
+</span>
         </div>
     `;
 
+    const currentLang = getCurrentLanguage()
+    card.querySelectorAll(`[data-${currentLang}]`).forEach((el) => (el.style.display = "inline"))
+    card.querySelectorAll(`[data-${currentLang === "en" ? "fr" : "en"}]`).forEach((el) => (el.style.display = "none"))
+  
     const titleElement = card.querySelector('.design-title');
     titleElement.contentEditable = false;
     titleElement.classList.remove('renaming');
 
     return card;
 }
+
+function updateDesignCards(lang) {
+    const designCards = document.querySelectorAll('.design-card');
+    designCards.forEach(card => {
+      card.querySelectorAll(`[data-${lang}]`).forEach((el) => (el.style.display = "inline"))
+      card.querySelectorAll(`[data-${lang === "en" ? "fr" : "en"}]`).forEach((el) => (el.style.display = "none"))
+    });
+  }
 
 async function renderDesigns() {
   showLoading();
@@ -171,10 +187,10 @@ async function renameDesign(designId, newName) {
     let message = '';
 
     try {
-        // Get the current user
         const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError) throw new Error('Error getting user information');
 
-        // First check if a design with the new name already exists
+        // Check if a design with the new name already exists
         const { data: existingDesigns, error: checkError } = await supabase
             .from("user_files")
             .select("id")
@@ -182,12 +198,12 @@ async function renameDesign(designId, newName) {
             .eq("owner", user.id);
 
         if (checkError) {
-            console.error("Error checking existing names:", checkError);
             throw new Error('Error checking design names');
         }
 
         if (existingDesigns && existingDesigns.length > 0) {
             window.translatedAlert('unique_name_error');
+            throw new Error('A design with this name already exists');
         }
 
         // If no existing design with that name, proceed with renaming
@@ -197,11 +213,9 @@ async function renameDesign(designId, newName) {
             .eq("id", designId);
 
         if (error) {
-            console.error("Error renaming design:", error);
             throw new Error('Failed to rename design');
         }
 
-        console.log("Design renamed successfully");
         success = true;
         message = 'Design renamed successfully';
 
@@ -209,14 +223,12 @@ async function renameDesign(designId, newName) {
         console.error('Error in renameDesign:', error);
         message = error.message;
     } finally {
-        // Update the UI regardless of success or failure
+        // Update the UI
         const titleElement = document.querySelector(`[data-design-id="${designId}"] .design-title`);
         if (titleElement) {
             if (!success) {
-                // Revert the name change in the UI
                 titleElement.textContent = titleElement.getAttribute("data-original-name");
             } else {
-                // Update the data-original-name attribute
                 titleElement.setAttribute("data-original-name", newName);
             }
         }
@@ -281,9 +293,10 @@ async function deleteDesign(event) {
       window.translatedAlert('design_ordered_no_delete');
       return;
   }
+  const currentLang = getCurrentLanguage();
+  const translatedMessage = getTranslation('delete_confirmation', currentLang).replace('{0}', designName);
+  const shouldDelete = await confirm(translatedMessage);
 
-  const shouldDelete = await confirm(`Are you sure you want to delete "${designName}"?`);
-  
   if (shouldDelete) {
       try {
           // Step 1: Delete the file from storage

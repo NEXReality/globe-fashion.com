@@ -692,16 +692,14 @@ const applyImageToLeg = () => {
 
 // Function to sync the canvases but with different backgrounds
 function syncCanvases(sourceCanvas, targetCanvas, backgroundColor) {
-    // Clone all objects from source to target
-    targetCanvas.clear();
-    targetCanvas.setBackgroundColor(backgroundColor, () => {
-        const objects = sourceCanvas.getObjects();
-        objects.forEach(obj => {
-            fabric.util.enlivenObjects([obj.toObject()], (clonedObjs) => {
-                targetCanvas.add(clonedObjs[0]);
+    sourceCanvas.clone((clonedCanvas) => {
+        targetCanvas.clear();  // Clear previous content
+        targetCanvas.setBackgroundColor(backgroundColor, () => {
+            clonedCanvas.getObjects().forEach(obj => {
+                targetCanvas.add(obj);
             });
+            targetCanvas.renderAll();
         });
-        targetCanvas.renderAll();
     });
 }
 
@@ -829,6 +827,7 @@ document.addEventListener('keydown', function(event) {
         const activeObject = legFabricCanvas.getActiveObject();
         if (activeObject) {
             deleteObject(null, { target: activeObject });
+            syncCanvases(legFabricCanvas, legRibFabricCanvas, lastElasticRibLegColor);
         }
     }
 });
@@ -1746,7 +1745,7 @@ if (!isSharedPage) {
 
 // Renderer, Camera, OrbitControls -----------------------------------------------------------------------------------------------------------------------------------
 const sizes = {
-    width: threeContainer.clientWidth,
+    width: threeContainer.clientWidth - 1,
     height: threeContainer.clientHeight
 }
 
@@ -1769,14 +1768,16 @@ window.addEventListener('resize', () =>
  * Camera
  */
 // Base camera
-const camera = new THREE.PerspectiveCamera(40, sizes.width / sizes.height, 0.1, 100)
+const camera = new THREE.PerspectiveCamera(40, sizes.width / sizes.height, 0.1, 100);
 setCameraPositionWithAnimation('initial');
 camera.lookAt(0, 4, 0);
-scene.add(camera)
+scene.add(camera);
 
 // Controls
-const controls = new OrbitControls(camera, threeContainer)
-controls.enableDamping = true
+const controls = new OrbitControls(camera, threeContainer);
+controls.enableDamping = true;
+controls.minDistance = 1;
+controls.maxDistance = 15;
 
 function setCameraPositionWithAnimation(positionName) {
     let cam = cameraPositions[positionName];
@@ -1843,17 +1844,6 @@ renderer.toneMappingExposure = 0.3;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-// Optional: Add environment map for more realistic reflections
-// const environment = new RoomEnvironment();
-// const pmremGenerator = new PMREMGenerator(renderer);
-// environmentMap = pmremGenerator.fromScene(environment).texture;
-
-// Apply to scene
-// scene.environment = environmentMap;
-// scene.background = new THREE.Color().setStyle('rgba(0, 0, 0, 0.5)'); //new THREE.Color('#D3D3D3'); 
-
-
-// Screenshot
 
 
 
@@ -1874,8 +1864,8 @@ const tick = () =>
 
 tick();
 
-// Function to take screenshot
 
+// Function to take screenshot
 export async function takeScreenshot() {
     // Save original camera state and renderer size
     const originalPosition = camera.position.clone();
