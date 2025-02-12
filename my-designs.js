@@ -15,7 +15,8 @@ async function fetchDesigns() {
 }
 
 function createDesignCard(design) {
-    const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/public-bucket/${design.name}`;
+    const timestamp = new Date().getTime(); // Generate a unique timestamp
+    const imageUrl = `${SUPABASE_URL}/storage/v1/object/public/public-bucket/${design.name}?t=${timestamp}`;
     const displayName = design.custom_name || design.design_name;
     const card = document.createElement('div');
     card.className = 'design-card';
