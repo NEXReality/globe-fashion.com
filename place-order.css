@@ -81,7 +81,8 @@ td {
 }
 
 /* Total quantity styles */
-.total-label, .total-value {
+.total-label,
+.total-value {
     font-weight: 600;
 }
 
@@ -152,7 +153,8 @@ td {
     z-index: 1000;
     align-items: center;
     justify-content: center;
-    overflow: hidden; /* Prevent scrolling on the background */
+    overflow: hidden;
+    /* Prevent scrolling on the background */
 }
 
 .design-select-modal.active {
@@ -164,7 +166,8 @@ td {
     border-radius: var(--radius-lg);
     width: 100%;
     max-width: 600px;
-    max-height: 90vh; /* Limit the height to 90% of the viewport height */
+    max-height: 90vh;
+    /* Limit the height to 90% of the viewport height */
     margin: 2rem;
     display: flex;
     flex-direction: column;
@@ -201,7 +204,8 @@ td {
 
 .modal-body {
     flex-grow: 1;
-    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
     padding: 1rem;
 }
 
@@ -328,9 +332,7 @@ td {
 }
 
 /* Ensure club name doesn't show error outline */
-#clubName:not(:required) {
-    
-}
+#clubName:not(:required) {}
 
 /* Form actions */
 .form-actions {

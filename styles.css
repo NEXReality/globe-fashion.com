@@ -34,6 +34,7 @@ body {
     border-bottom: 1px solid var(--color-border);
     z-index: 50;
 }
+
 .header-share {
     position: fixed;
     top: 0;
@@ -133,7 +134,7 @@ body {
 .viewer-section {
     flex: 1;
     background: var(--color-surface);
-    
+
 }
 
 .viewer-container {
@@ -194,9 +195,11 @@ body {
     cursor: pointer;
     transition: background-color 0.2s;
 }
+
 .save-button:hover {
     background: #111827;
 }
+
 .download-button {
     display: flex;
     align-items: center;
@@ -211,12 +214,15 @@ body {
     cursor: pointer;
     transition: background-color 0.2s;
 }
+
 .download-button:hover {
     background: #111827;
 }
+
 .dropdown-arrow {
     margin-left: 0.25rem;
 }
+
 .save-dropdown {
     position: absolute;
     top: 100%;
@@ -370,6 +376,7 @@ body {
     font-size: 0.875rem;
     color: var(--color-text-secondary);
 }
+
 /* color selector specific styles */
 .color-selector {
     display: flex;
@@ -744,6 +751,7 @@ body {
     background: var(--color-primary);
     color: white;
 }
+
 .screenshot-button {
     flex: 1;
     position: absolute;
@@ -912,17 +920,17 @@ body {
     font-size: 0.875rem;
     color: var(--color-text);
     margin-bottom: 1.25rem;
-  }
-  
-  #forgot-password-stage-2 {
+}
+
+#forgot-password-stage-2 {
     text-align: center;
-  }
-  
-  #backToLoginBtn {
+}
+
+#backToLoginBtn {
     margin-top: 1rem;
-  }
-    
-  .submit-button {
+}
+
+.submit-button {
     background: var(--color-primary);
     color: white;
     padding: 0.75rem;
@@ -933,38 +941,39 @@ body {
     cursor: pointer;
     transition: background-color 0.2s;
     width: 100%;
-  }
-  
-  .submit-button:hover {
+}
+
+.submit-button:hover {
     background-color: #111827;
-  }
-  
-  .form-footer {
+}
+
+.form-footer {
     display: flex;
     justify-content: center;
     font-size: 0.875rem;
     margin-top: 1rem;
-  }
-  
-  .text-link {
+}
+
+.text-link {
     color: var(--color-text-secondary);
     text-decoration: none;
     transition: color 0.2s;
-  }
-  
-  .text-link:hover {
+}
+
+.text-link:hover {
     color: var(--color-text);
-  }
-  
-  .design-save-preview {
+}
+
+.design-save-preview {
     width: 100%;
-    height: 200px; /* Adjust as needed */
+    height: 200px;
+    /* Adjust as needed */
     background-size: cover;
     background-position: center;
     border-radius: 8px;
-  }
+}
 
-  .upload-status {
+.upload-status {
     margin-top: 10px;
     padding: 5px 10px;
     border-radius: 4px;
@@ -986,6 +995,7 @@ body {
 .hidden {
     display: none;
 }
+
 /* sripes orientation */
 .radio-group {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -1046,11 +1056,11 @@ body {
     color: #666;
 }
 
-.radio-option input[type="radio"]:checked + .radio-content {
+.radio-option input[type="radio"]:checked+.radio-content {
     color: white;
 }
 
-.radio-option input[type="radio"]:checked + .radio-content svg {
+.radio-option input[type="radio"]:checked+.radio-content svg {
     color: white;
 }
 
@@ -1060,20 +1070,21 @@ body {
     transition: color 0.3s ease;
 }
 
-.radio-option input[type="radio"]:checked + .radio-content svg {
+.radio-option input[type="radio"]:checked+.radio-content svg {
     color: white;
 }
 
 /* Focus styles for accessibility */
-.radio-option input[type="radio"]:focus-visible + .radio-content {
+.radio-option input[type="radio"]:focus-visible+.radio-content {
     outline: 2px solid #4a90e2;
     outline-offset: 2px;
 }
+
 /* end */
 
-  /* number tab */
+/* number tab */
 
-  .no-tab-container {
+.no-tab-container {
     display: inline-flex;
     border-bottom: 1px solid #e2e2e2;
 }
@@ -1199,10 +1210,10 @@ body {
     cursor: pointer;
 }
 
-  /* end */
+/* end */
 
-  /* Override default alert styles */
-  .modal-overlay-alert {
+/* Override default alert styles */
+.modal-overlay-alert {
     position: fixed;
     top: 0;
     left: 0;
@@ -1213,9 +1224,9 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 1000;
-  }
+}
 
-  .modal-content-alert {
+.modal-content-alert {
     background: white;
     padding: 20px;
     border-radius: var(--radius-lg);
@@ -1223,14 +1234,14 @@ body {
     max-width: 400px;
     width: 90%;
     animation: slideIn 0.3s ease;
-  }
+}
 
-  .modal-message-alert {
+.modal-message-alert {
     margin: 0 0 15px 0;
     font-family: system-ui, -apple-system, sans-serif;
-  }
+}
 
-  .modal-button-alert {
+.modal-button-alert {
     background: var(--color-primary);
     color: white;
     border: none;
@@ -1239,29 +1250,30 @@ body {
     cursor: pointer;
     float: right;
     transition: background 0.2s;
-  }
+}
 
-  .modal-button-alert:hover {
+.modal-button-alert:hover {
     background: #111827;
-  }
+}
 
-  .modal-button-primary {
+.modal-button-primary {
     background: var(--color-primary);
     color: white;
     margin-right: 10px;
-  }
+}
 
-  .modal-button-secondary {
+.modal-button-secondary {
     color: white;
-  }
+}
 
-  @keyframes slideIn {
+@keyframes slideIn {
     from {
-      transform: translateY(-20px);
-      opacity: 0;
+        transform: translateY(-20px);
+        opacity: 0;
     }
+
     to {
-      transform: translateY(0);
-      opacity: 1;
+        transform: translateY(0);
+        opacity: 1;
     }
-  }
+}

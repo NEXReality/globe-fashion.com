@@ -1,6 +1,6 @@
 /* My Designs specific styles */
 :root {
-  --color-destructive:#d10000;
+  --color-destructive: #d10000;
 }
 
 .my-designs-container {
@@ -159,4 +159,3 @@
   font-size: 0.875rem;
   color: var(--color-text-secondary);
 }
-

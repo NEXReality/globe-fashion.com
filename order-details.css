@@ -32,7 +32,8 @@
     gap: 2rem;
 }
 
-.order-items, .customer-details {
+.order-items,
+.customer-details {
     background: var(--color-background);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
@@ -175,4 +176,3 @@
         grid-template-columns: 1fr;
     }
 }
-
