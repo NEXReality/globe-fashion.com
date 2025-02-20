@@ -161,6 +161,7 @@ body {
     position: sticky;
     top: 0;
     padding-top: 91px;
+    overflow-y: scroll; /* Forces scrollbar to always be visible */
 }
 
 .panel-header {
