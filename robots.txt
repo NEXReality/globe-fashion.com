@@ -1,9 +1,9 @@
 User-agent: *
 Allow: /
-Disallow: /admin.hmtl
-Disallow: /admin-design.hmtl
-Disallow: /order-details.hmtl
-Disallow: /admin-my-designs.hmtl
-Disallow: /admin-user-designs.hmtl
+Disallow: /admin.html
+Disallow: /admin-design.html
+Disallow: /order-details.html
+Disallow: /admin-my-designs.html
+Disallow: /admin-user-designs.html
 
 Sitemap: https://globe-fashion.com/sitemap.xml
